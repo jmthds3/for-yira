@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Jame</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: #fdf6f0;
+    color: #4a3030;
+    overflow-x: hidden;
+  }
+
+  /* Floating petals animation */
+  .petal {
+    position: fixed;
+    top: -60px;
+    font-size: 1.5rem;
+    animation: falling linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+  @keyframes falling {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(160deg, #fff0f5 0%, #fde8d8 50%, #fdf6e3 100%);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,182,193,0.3) 0%, transparent 70%);
+    top: -100px; left: -100px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,218,185,0.3) 0%, transparent 70%);
+    bottom: -80px; right: -80px;
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .flower-crown {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    animation: sway 3s ease-in-out infinite;
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: #c2506a;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    animation: fadeUp 1s ease both;
+  }
+  .hero h1 span {
+    display: block;
+    font-style: italic;
+    color: #e8835a;
+  }
+  .hero .subtitle {
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #b07070;
+    margin-top: 1rem;
+    font-weight: 300;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+  .scroll-hint {
+    margin-top: 3rem;
+    animation: bounce 2s infinite;
+    font-size: 1.5rem;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Section shared */
+  section {
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: #c2506a;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .section-divider {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    letter-spacing: 8px;
+  }
+
+  /* Gallery */
+  .gallery-section {
+    background: #fff8f5;
+    max-width: 100%;
+    padding: 5rem 2rem;
+  }
+  .gallery-inner { max-width: 900px; margin: 0 auto; }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+  .gallery-card {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #fce4ec, #ffd6cc);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px dashed #f0a0b0;
+  }
+  .gallery-card:hover {
+    transform: translateY(-6px) rotate(1deg);
+    box-shadow: 0 16px 40px rgba(194,80,106,0.2);
+  }
+  .gallery-card .card-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
+  .gallery-card .card-label {
+    font-size: 0.85rem;
+    color: #b07070;
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+  .gallery-card:nth-child(even) { background: linear-gradient(135deg, #fdebd0, #fce4ec); }
+
+  /* Para agregar fotos reales, reemplaza el contenido de cada .gallery-card con:
+     <img src="ruta-de-tu-foto.jpg" alt="descripcion" style="width:100%; height:100%; object-fit:cover;">
+  */
+
+  /* Carta */
+  .carta-section { background: #fdf6f0; }
+  .carta-wrapper {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    position: relative;
+    box-shadow: 0 4px 30px rgba(194,80,106,0.1);
+    border: 1px solid #f9d4dd;
+  }
+  .carta-wrapper::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: #fce4ec;
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    line-height: 1;
+  }
+  .carta-text {
+    font-size: 1.1rem;
+    line-height: 2;
+    color: #5a3a3a;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+  }
+  .carta-firma {
+    text-align: right;
+    margin-top: 2rem;
+    font-family: 'Playfair Display', serif;
+    color: #c2506a;
+    font-size: 1.2rem;
+  }
+
+  /* Razones */
+  .razones-section { background: #fff0f5; max-width: 100%; padding: 5rem 2rem; }
+  .razones-inner { max-width: 900px; margin: 0 auto; }
+  .razones-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .razon-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.8rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    border-left: 4px solid #e8835a;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 16px rgba(194,80,106,0.08);
+  }
+  .razon-card:hover { transform: translateX(6px); }
+  .razon-card:nth-child(odd) { border-left-color: #c2506a; }
+  .razon-card:nth-child(3n) { border-left-color: #f4a261; }
+  .razon-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #f9d4dd;
+    line-height: 1;
+    min-width: 40px;
+  }
+  .razon-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #5a3a3a;
+    padding-top: 0.3rem;
+  }
+  .razon-text strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    color: #c2506a;
+    font-size: 1.05rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+  }
+
+  /* Footer */
+  footer {
+    background: linear-gradient(160deg, #c2506a, #e8835a);
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  footer h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+  footer p {
+    font-weight: 300;
+    letter-spacing: 2px;
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+  .heart-big {
+    font-size: 3rem;
+    display: block;
+    margin: 1.5rem auto;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Pétalos flotantes -->
+<div id="petals"></div>
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="flower-crown">🌷🌸🌼</div>
+    <!-- Cambia "Yira" por el nombre o apodo que prefieras -->
+    <h1>Yira<span>mi amol</span></h1>
+    <!-- Cambia este texto si quieres -->
+    <p class="subtitle">pilla esto kajskajsk</p>
+    <div class="scroll-hint">↓</div>
+  </div>
+</div>
+
+<!-- ===================== GALERÍA ===================== -->
+<div class="gallery-section">
+  <div class="gallery-inner">
+    <h2 class="section-title reveal"></h2>
+    <div class="section-divider reveal">🌷 🌸 🌼</div>
+    <div class="gallery-grid reveal">
+
+      <!-- TARJETA 1 — Cambia el emoji y el texto, o reemplaza con una <img> -->
+      <div class="gallery-card" style="padding:0;">
+        <img src="images/foto12.jpeg" alt="uste haciendome comida" style="width:100%;height:100%;object-fit:cover;">
+        <div class="card-label" style="position:absolute;bottom:10px;background:rgba(255,255,255,0.75);padding:4px 12px;border-radius:8px;">uste haciendome comida</div>
+      </div>
+
+      <!-- TARJETA 2 -->
+      <div class="gallery-card" style="padding:0;">
+        <img src="images/foto7.jpeg" alt="tomando claro" style="width:100%;height:100%;object-fit:cover;">
+        <div class="card-label" style="position:absolute;bottom:10px;background:rgba(255,255,255,0.75);padding:4px 12px;border-radius:8px;">tomando claro</div>
+      </div>
+
+      <!-- TARJETA 3 -->
+      <div class="gallery-card" style="padding:0;">
+        <img src="images/foto10.jpeg" alt="playaaaa" style="width:100%;height:100%;object-fit:cover;">
+        <div class="card-label" style="position:absolute;bottom:10px;background:rgba(255,255,255,0.75);padding:4px 12px;border-radius:8px;">playaaaaa</div>
+      </div>
+
+      <!-- TARJETA 4 -->
+      <div class="gallery-card" style="padding:0;">
+        <img src="images/foto1.jpeg" alt="me dijiste que siii" style="width:100%;height:100%;object-fit:cover;">
+        <div class="card-label" style="position:absolute;bottom:10px;background:rgba(255,255,255,0.75);padding:4px 12px;border-radius:8px;">me dijiste que siii</div>
+      </div>
+
+      <!-- TARJETA 5 -->
+      <div class="gallery-card" style="padding:0;">
+        <img src="images/foto2.jpeg" alt="siempre juntos" style="width:100%;height:100%;object-fit:cover;">
+        <div class="card-label" style="position:absolute;bottom:10px;background:rgba(255,255,255,0.75);padding:4px 12px;border-radius:8px;">siempre juntos</div>
+      </div>
+
+      <!-- TARJETA 6 -->
+      <div class="gallery-card" style="padding:0;">
+        <img src="images/foto9.jpeg" alt="despues de conocer a mi mamá" style="width:100%;height:100%;object-fit:cover;">
+        <div class="card-label" style="position:absolute;bottom:10px;background:rgba(255,255,255,0.75);padding:4px 12px;border-radius:8px;">despues de conocer a mi mamá</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CARTA ===================== -->
+<section class="carta-section">
+  <h2 class="section-title reveal">waos</h2>
+  <div class="section-divider reveal">💌</div>
+  <div class="carta-wrapper reveal">
+    <!-- Reemplaza este texto con tu carta personal -->
+    <p class="carta-text">
+      corazón, sé que las cosas se complicaron un poco, y aunque sea por una mala intención de una persona 
+      ajena a la relación, y es duro y duelen las cosas, tanto a mí como a ti, y sé que es complicado, los miedos 
+      y las inseguridades que han causado otra persona en ti, y entiendo como te sientes, sé que es complicado, por 
+      un lado quieres creerme, pero por el otro tu mente te dice que no, yo sé que no quieres ser dura conmigo, y te 
+      entiendo mucho, entiendo lo complicado que es, y lastimosamente la vida es injusta y me toca remediar una mala 
+      intención que tomó otra persona sin saber las consecuencias, y lo haré, ahora te lo digo con palabras y espero que 
+      en eso, pero solo en esto tengas un poquito de confianza en mí, recuerda todas las veces que no fuí un incumplido, 
+      siempre me he esforzado para que lo que pienso darte, si pueda dártelo, porque es que simplemente tú mereces todo lo 
+      bonito de este mundo, y yo te amo con mis fuerzas, y solo por el hecho de que te amo, es el motivo más que suficiente 
+      para luchar por ti, y haré lo imposible y me esforzaré hasta el cansancio para que vuelvas a confiar en mí, quisiera que 
+      volvieras a confiar ya, pero eso es algo que yo iré construyendo en ti, lo único que yo te pido a ti, es que siempre me 
+      elijas a mí, no me vayas a dejar solito, porque yo me quiero quedar contigo toda la vida.
+    </p>
+    <!-- Cambia la firma si quieres -->
+    <p class="carta-firma">🌷</p>
+  </div>
+</section>
+
+<!-- ===================== RAZONES ===================== -->
+<div class="razones-section">
+  <div class="razones-inner">
+    <h2 class="section-title reveal">nubbbb</h2>
+    <div class="section-divider reveal">🌸 🌼 🌷</div>
+    <div class="razones-grid">
+
+      <!-- RAZÓN 1 — Cambia el título y el texto -->
+      <div class="razon-card reveal">
+        <div class="razon-number">23</div>
+        <div class="razon-text">
+          <strong>Tu sonrisa</strong>
+          tu sonrisa es mi salvación, ya te lo habia dicho pero es de mis mayores motivos para esforzarme
+          y seguir adelante a pesar del cansacio
+        </div>
+      </div>
+
+      <!-- RAZÓN 2 -->
+      <div class="razon-card reveal">
+        <div class="razon-number">23</div>
+        <div class="razon-text">
+          <strong>tus ojos</strong>
+          waos, tus ojos, a veces me parece increible que me miren a mi solamente
+        </div>
+      </div>
+
+      <!-- RAZÓN 3 -->
+      <div class="razon-card reveal">
+        <div class="razon-number">23</div>
+        <div class="razon-text">
+          <strong>llenaste de color mi vida</strong>
+          y así es, me viste como un lienzo blanco, empezaste a pintar y llenaste de color mi vida gris
+        </div>
+      </div>
+
+      <!-- RAZÓN 4 -->
+      <div class="razon-card reveal">
+        <div class="razon-number">23</div>
+        <div class="razon-text">
+          <strong>la mejor</strong>
+          te admiro demasiado. Eres mi mayor orgullo y felicidad, quiero estar a tu lado para 
+          verte lograr y cumplir tus sueños, quiero verte ser grande
+        </div>
+      </div>
+
+      <!-- RAZÓN 5 -->
+      <div class="razon-card reveal">
+        <div class="razon-number">23</div>
+        <div class="razon-text">
+          <strong>te amo</strong>
+          5 letras, parece irreal que en tan poquitas letras, se intente englobar un sentimiento
+          que simplemente a veces es dificil de describir, y yo lo siento por ti, te amo 23 millones
+        </div>
+      </div>
+
+      <!-- RAZÓN 6 -->
+      <div class="razon-card reveal">
+        <div class="razon-number">23</div>
+        <div class="razon-text">
+          <strong>la chica de mis sueños</strong>
+          tremendo que te conocí sin saber que ibas a ser el amor de mi vida, tu eres lo que siempre soñé
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <h2>Para Yira 🌷</h2>
+  <span class="heart-big">❤️</span>
+  <p>está chimba la pagina sioq, kjaskaskjsa. te amo mucho</p>
+</footer>
+
+<script>
+  // Pétalos cayendo
+  const petalSymbols = ['🌷','🌸','🌼','✿','❀'];
+  const container = document.getElementById('petals');
+  for (let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    p.classList.add('petal');
+    p.textContent = petalSymbols[Math.floor(Math.random() * petalSymbols.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (5 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    p.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+    container.appendChild(p);
+  }
+
+  // Animación al hacer scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
